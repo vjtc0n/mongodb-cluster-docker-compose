@@ -81,6 +81,16 @@ sh.enableSharding("MyDatabase")
 // Setup shardingKey for collection `MyCollection`**
 db.adminCommand( { shardCollection: "MyDatabase.MyCollection", key: { supplierId: "hashed" } } )
 
+sh.shardCollection("Sound.VectorRecord", { vector_hash: 1 } )
+
+sh.addShardToZone("rs-shard-01", "AAA")
+sh.addShardToZone("rs-shard-02", "BBB")
+sh.addShardToZone("rs-shard-03", "CCC")
+sh.updateZoneKeyRange("Sound.VectorRecord", { vector_hash: "-99999999999999999999" }, { vector_hash: "-33333333333333333333" }, "AAA")
+
+sh.updateZoneKeyRange("Sound.VectorRecord", { vector_hash: "-33333333333333333333" }, { vector_hash: "33333333333333333333" }, "BBB")
+
+sh.updateZoneKeyRange("Sound.VectorRecord", { vector_hash: "33333333333333333333" }, { vector_hash: "99999999999999999999" }, "CCC")
 ```
 
 >Done! but before you start inserting data you should verify them first
